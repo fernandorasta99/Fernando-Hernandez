@@ -1,0 +1,44 @@
+PROCESSOR 16F887
+
+    #include <xc.inc>
+
+;CONFIG CONFIG1=38C4
+
+CONFIG FOSC = INTRC_NOCLKOUT
+CONFIG WDTE = OFF
+CONFIG PWRTE = ON
+CONFIG MCLRE = OFF
+CONFIG CP = OFF
+CONFIG CPD = OFF
+CONFIG BOREN = OFF
+CONFIG IESO = OFF
+CONFIG FCMEN = ON
+CONFIG DEBUG = ON
+
+;CONFIG CONFIG2=3FFF
+
+CONFIG BOR4V=BOR40V
+CONFIG WRT = OFF
+
+PSECT udata ;bits de memoria asignado
+ pos1:  ;posiciones del valor
+    DS 1
+ pos2:
+    DS 1
+ pos3:
+    DS 1
+
+PSECT resetVec,class=CODE,delta=2
+resetVec:
+    PAGESEL main
+    goto main
+    
+PSECT code
+ main:
+    bcf 0x03,6
+     bcf 0x03,5   ;seleccion del banco 0
+     movlw 0b10010010
+     ANDLW 0b01111111
+     movwf pos1
+    goto main
+ END
